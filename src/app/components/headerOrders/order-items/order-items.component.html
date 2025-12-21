@@ -1,0 +1,64 @@
+<div class="container-fluid mt-5">
+  @if (order) {
+  <div class="order-summary row mb-4 p-3">
+    <div class="col-md-6 mb-1">
+      <h6>الإجمالي : {{ order.totalAmount | number:'1.2-2' }} جنية</h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6>حالة الطلب : <span class="badge" style="background: var(--main-color);">@if(order.status == "Pending") {
+          قيد الإنتظار
+          }@else if (order.status == "Confirmed") {
+          مؤكد
+          }@else if (order.status == "Shipped") {
+          تم الشحن
+          }@else if (order.status == "Delivered") {
+          تم التوصيل
+          }@else if (order.status == "Canceled") {
+          ملغي من المورد
+          }@else {
+          {{order.status}}
+          }</span></h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6>تاريخ التوصيل : {{ formatDate(order.deliveryDate) }}</h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6>طريقة الدفع : {{ order.paymentMethod }}</h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6> مبلغ الدفع للمحفظة : {{ order.walletPaymentAmount }}</h6>
+    </div>
+  </div>
+
+  <div class="cardParent">
+    <div class="card-body">
+      <div class="table-responsive custom-table">
+        <table class="table custom-table-design text-center">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>اسم المنتج</th>
+              <th>الكمية</th>
+              <th>سعر الوحدة</th>
+              <th>الإجمالي</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of order.items; track item.id; let i = $index) {
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.unitPrice | number:'1.2-2' }} جنية</td>
+              <td>{{ item.lineTotal | number:'1.2-2' }} جنية</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <p class="text-center">لا توجد تفاصيل متاحة</p>
+  }
+</div>

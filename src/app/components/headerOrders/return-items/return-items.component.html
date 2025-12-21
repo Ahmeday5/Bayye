@@ -1,0 +1,54 @@
+<div class="container-fluid mt-5">
+  @if (returnOrder) {
+  <div class="order-summary row mb-4 p-3">
+    <div class="col-md-6 mb-1">
+      <h6>رقم الطلبية: {{ returnOrder.supplierOrderId }}</h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6>تاريخ الطلبية: {{ formatDate(returnOrder.orderDate) }}</h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6>اسم المشتري: {{ returnOrder.buyerName }}</h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6>الكمية المرتجعة: {{ returnOrder.totalReturnedQuantity }}</h6>
+    </div>
+    <div class="col-md-6 mb-1">
+      <h6>المبلغ المسترد: {{ returnOrder.totalRefundAmount | number:'1.2-2' }} جنية</h6>
+    </div>
+  </div>
+
+  <div class="cardParent">
+    <div class="card-body">
+      <div class="table-responsive custom-table">
+        <table class="table custom-table-design text-center">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>اسم المنتج</th>
+              <th>الكمية المرتجعة</th>
+              <th>سعر الوحدة</th>
+              <th>تاريخ المرتجع</th>
+              <th>الإجمالي</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of returnOrder.items; track item.id; let i = $index) {
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.returnedQuantity }}</td>
+              <td>{{ item.unitPrice | number:'1.2-2' }} جنية</td>
+              <td>{{ formatDate(item.returnDate) }}</td>
+              <td>{{ (item.returnedQuantity * item.unitPrice) | number:'1.2-2' }} جنية</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <p class="text-center">لا توجد تفاصيل متاحة</p>
+  }
+</div>

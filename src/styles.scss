@@ -1,0 +1,41 @@
+:root {
+  --main-color: #01355D;
+  --second-color: #ffffff;
+  --third-color: #F97F00;
+  --bg-main: #eae1e1;
+  --font-arabic: "Noto Sans Arabic";
+  --font-latin: "Inter";
+}
+
+body {
+  margin: 0 !important;
+  font-family: var(--font-latin) !important;
+  direction: rtl;
+}
+
+.container-fluid {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(27, 116, 187, 0.5);
+}
+
+.row {
+  margin: 0;
+}
+
+/*************alert*******************/
+svg {
+  width: 30px;
+  height: 25px;
+  margin-left: 20px;
+}
+
+@media (max-width: 576px) {
+  .btn-add {
+    width: 100% !important;
+  }
+}

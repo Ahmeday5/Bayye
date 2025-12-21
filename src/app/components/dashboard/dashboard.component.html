@@ -1,0 +1,97 @@
+<div class="container-fluid mt-5 mb-3">
+  <!-- الكروت -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cardParent">
+        <div class="card-body">
+          <div class="card-header wow fadeInDown">
+            <h4 class="card-title">رصيد الطلبيات</h4>
+          </div>
+          <div class="row mt-4 cards-chart justify-content-center">
+            @if (!loading) {
+            <!-- الطلبيات -->
+            <div class="col-md-10 mt-3">
+              <a style="text-decoration: none;" routerLink="/order">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="text-content">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h5 class="card-title">مقارنة الطلبات (اليوم مقابل الشهر)</h5>
+                          <div class="content d-flex mt-5">
+                            <h5 class="card-title ms-3"> طلبات اليوم : {{ordersToday}}</h5>
+                            <h5 class="card-title"> طلبات الشهر : {{ordersMonth}}</h5>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <canvas class="card-text" style="color: white;" #ordersChart></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <!-- المشترين -->
+            <div class="col-md-10 mt-3">
+              <a style="text-decoration: none;" routerLink="/all-activeBuyers">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="text-content">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h5 class="card-title">( المشترين)</h5>
+                          <div class="content mt-5">
+                            <h5 class="card-title ms-3"> جميع المشترين : {{allCount}}</h5>
+                            <h5 class="card-title"> المشترين الناشطين : {{activeCount}}</h5>
+                            <h5 class="card-title"> المشترين غير الناشطين : {{inactiveCount}}</h5>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <canvas class="card-text" style="color: white;" #buyersChart></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <!-- الموردين -->
+            <div class="col-md-10 mt-3">
+              <a style="text-decoration: none;" routerLink="/all-supplier">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="text-content">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h5 class="card-title">( الموردين)</h5>
+                          <div class="content mt-5">
+                            <h5 class="card-title ms-3"> جميع الموردين : {{allCount}}</h5>
+                            <h5 class="card-title"> الموردين الناشطين : {{activeCount}}</h5>
+                            <h5 class="card-title"> الموردين غير الناشطين : {{inactiveCount}}</h5>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <canvas class="card-text" style="color: white;" #suppliersChart></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (loading) {
+<div class="col-12 mt-5 d-flex justify-content-center align-items-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">جاري التحميل...</span>
+  </div>
+</div>
+}

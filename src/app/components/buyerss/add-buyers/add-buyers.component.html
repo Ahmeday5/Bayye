@@ -1,0 +1,151 @@
+<div class="container-fluid mt-5 mb-4">
+  <div class="row">
+    <div class="col-md-12 page-name">
+      <h1 class="page-title">إضافة مشتري جديد</h1>
+    </div>
+    <!-- SVG Icons -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path
+          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+      </symbol>
+      <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </symbol>
+    </svg>
+
+    <!-- Success and Error Messages -->
+    @if (successMessage) {
+    <div class="alert alert-success d-flex align-items-center mt-4" role="alert">
+      <svg class="bi flex-shrink-0 me-2 ms-3" width="24" height="24" role="img" aria-label="Success:">
+        <use xlink:href="#check-circle-fill" />
+      </svg>
+      <div>{{ successMessage }}</div>
+    </div>
+    }
+    @if (errorMessage) {
+    <div class="alert alert-danger d-flex align-items-center mt-4" role="alert">
+      <svg class="bi flex-shrink-0 me-2 ms-3" width="24" height="24" role="img" aria-label="Danger:">
+        <use xlink:href="#exclamation-triangle-fill" />
+      </svg>
+      <div>{{ errorMessage }}</div>
+    </div>
+    }
+
+    @if (isLoading) {
+    <div class="text-center mb-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">جاري التحميل...</span>
+      </div>
+    </div>
+    }
+
+    <!-- Form -->
+    <form #form="ngForm" (ngSubmit)="handleSubmit()" class="mt-5 needs-validation" novalidate>
+      <div class="row">
+        <div class="col-md-6 form-section">
+          <!-- صورة -->
+          <label>الصورة الداخلية للمنشأة</label>
+          <div class="text-center mb-4 position-relative">
+            @if (currentImagePreview) {
+            <div class="image-preview mb-3">
+              <img [src]="currentImagePreview" alt="معاينة الصورة"
+                style="max-width: 200px; height: 100px; border-radius: 8px;">
+              <p class="text-muted small">معاينة الصورة المختارة</p>
+            </div>
+            }
+            <input type="file" #PropertyInsideImage id="PropertyInsideImage" class="form-control"
+              accept="image/jpeg,image/png,image/jpg,image/webp,image/jfif" name="imageFile"
+              (change)="onImageChange($event)" required />
+            <div class="invalid-feedback">يرجى رفع صورة صالحة (JPEG, PNG, إلخ)</div>
+            <div class="valid-feedback">يبدو جيدًا!</div>
+          </div>
+        </div>
+
+        <div class="col-md-6 form-section">
+          <!-- صورة -->
+          <label>الصورة الخارجية للمنشأة</label>
+          <div class="text-center mb-4 position-relative">
+            @if (secondImagePreview) {
+            <div class="image-preview mb-3">
+              <img [src]="secondImagePreview" alt="معاينة الصورة"
+                style="max-width: 200px; height: 100px; border-radius: 8px;">
+              <p class="text-muted small">معاينة الصورة المختارة</p>
+            </div>
+            }
+            <input type="file" #PropertyOutsideImage id="PropertyOutsideImage" class="form-control"
+              accept="image/jpeg,image/png,image/jpg,image/webp,image/jfif" name="imageFile"
+              (change)="onImageChange($event)" required />
+            <div class="invalid-feedback">يرجى رفع صورة صالحة (JPEG, PNG, إلخ)</div>
+            <div class="valid-feedback">يبدو جيدًا!</div>
+          </div>
+        </div>
+
+        <div class="col-md-6 form-section">
+          <label for="buyerName" class="form-label">الاسم بالكامل</label>
+          <input type="text" id="buyerName" class="form-control" placeholder="ادخل الاسم" name="buyerName" required
+            [(ngModel)]="buyer.FullName" #FullName="ngModel" minlength="3" />
+          <div class="invalid-feedback">يرجى إدخال الأسم (حد أدنى 3 أحرف)</div>
+          <div class="valid-feedback">يبدو جيدًا!</div>
+        </div>
+        <div class="col-md-6 form-section">
+          <label for="PhoneNumber" class="form-label">رقم الهاتف</label>
+          <input type="text" id="PhoneNumber" class="form-control" placeholder="ادخل رقم الهاتف" name="PhoneNumber"
+            required [(ngModel)]="buyer.PhoneNumber" #PhoneNumber="ngModel" />
+          <div class="invalid-feedback">يرجى إدخال رقم هاتف صالح</div>
+          <div class="valid-feedback">يبدو جيدًا!</div>
+        </div>
+        <div class="col-md-6 form-section">
+          <label for="PropertyName" class="form-label">اسم المنشأة</label>
+          <input type="text" id="PropertyName" class="form-control" placeholder="ادخل اسم المنشأة" name="PropertyName"
+            required [(ngModel)]="buyer.PropertyName" #PropertyName="ngModel" />
+          <div class="invalid-feedback">يرجى إدخال اسم منشأة صالح</div>
+          <div class="valid-feedback">يبدو جيدًا!</div>
+        </div>
+        <div class="col-md-6 form-section">
+          <label for="PropertyType" class="form-label">نوع المنشأة</label>
+          <input type="text" id="PropertyType" class="form-control" placeholder="ادخل نوع المنشأة" name="PropertyType"
+            required [(ngModel)]="buyer.PropertyType" #PropertyType="ngModel" />
+          <div class="invalid-feedback">يرجى إدخال نوع منشأة صالح</div>
+          <div class="valid-feedback">يبدو جيدًا!</div>
+        </div>
+        <div class="col-md-6 form-section">
+          <label for="PropertyLocation" class="form-label">عنوان المنشأة</label>
+          <input type="text" id="PropertyLocation" class="form-control" placeholder="ادخل عنوان المنشأة"
+            name="PropertyLocation" required [(ngModel)]="buyer.PropertyLocation" #PropertyLocation="ngModel" />
+          <div class="invalid-feedback">يرجى إدخال عنوان منشأة صالح</div>
+          <div class="valid-feedback">يبدو جيدًا!</div>
+        </div>
+        <div class="col-md-6 form-section">
+          <label for="PropertyAddress" class="form-label">موقع المنشأة</label>
+          <input type="text" id="PropertyAddress" class="form-control" placeholder="موقع المنشأة" name="PropertyAddress"
+            required [(ngModel)]="buyer.PropertyAddress" #PropertyAddress="ngModel" />
+          <div class="invalid-feedback">يرجى إدخال موقع صالح</div>
+          <div class="valid-feedback">يبدو جيدًا!</div>
+        </div>
+        <div class="col-md-6 form-section">
+          <label for="DeliveryStationId" class="form-label">مكان التوصيل</label>
+          <select name="DeliveryStationId" id="DeliveryStationId" class="form-control" required
+            [(ngModel)]="buyer.DeliveryStationId" #DeliveryStationId="ngModel">
+            <option [ngValue]="null" selected disabled>اختر مكان</option>
+            @for (station of DeliveryStation; track station.id) {
+            <option [ngValue]="station.id">{{station.name}}</option>
+            }
+          </select>
+          <div class="invalid-feedback">يرجى اختيار مكان توصيل صالح</div>
+          <div class="valid-feedback">يبدو جيدًا!</div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-around mt-4">
+          <button class="btn btn-save" type="submit">
+            @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            } إضافة المشتري
+          </button>
+          <a class="btn btn-cansel" routerLink="/all-activeBuyers">إلغاء</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

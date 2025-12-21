@@ -1,0 +1,55 @@
+.header {
+  height: 10vh;
+  font-family: var(--font-latin); /* الخط العربي */
+  font-weight: 600; /* وزن الخط */
+  line-height: 100%; /* ارتفاع السطر */
+  text-align: left; /* محاذاة النص لليمين */
+  padding: 10px 0;
+}
+
+.header .logout {
+  padding: 0 15px;
+  display: flex;
+  flex-direction: row-reverse;
+  height: 20%;
+}
+
+.header .logout a {
+  border: none;
+  cursor: pointer;
+}
+
+.header .logout a img {
+  width: 20px;
+  margin-right: 17px;
+}
+
+.header .title-header {
+  width: 98%;
+  height: 80%;
+  margin-top: 10px;
+  border: 2px solid var(--main-color);
+  background-color: var(--second-color);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.header .title-header h3 {
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  text-align: right;
+  color: var(--main-color);
+  margin: 0;
+}
+
+.header .title-header h3 a {
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  color: var(--main-color);
+  margin: 0;
+  text-decoration: none;
+}

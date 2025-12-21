@@ -1,0 +1,121 @@
+<div class="container-fluid mt-5 mb-2">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Filter Modal -->
+      <form class="mb-5" [formGroup]="filterForm" role="search">
+        <div class="row">
+          <div class="col-12-md">
+            <h1 class="mb-2 text-center">البحث</h1>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <label for="buyerName" class="form-label">اسم المشتري</label>
+              <input formControlName="buyerName" class="form-control" type="search" id="buyerName"
+                placeholder="ابحث....." (input)="onDateChange()" />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <label for="year" class="form-label">السنة</label>
+              <select id="year" class="form-select" [(ngModel)]="year" [ngModelOptions]="{standalone: true}"
+                (change)="onDateChange()">
+                <option value="" disabled selected>اختر السنة</option>
+                @for (y of years; track y) {
+                <option [value]="y">{{ y }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <label for="month" class="form-label">الشهر</label>
+              <select id="month" class="form-select" [(ngModel)]="month" [ngModelOptions]="{standalone: true}"
+                (change)="onDateChange()" [disabled]="!year || year.trim() === ''">
+                <option value="" disabled selected>اختر الشهر</option>
+                <option value="01">يناير</option>
+                <option value="02">فبراير</option>
+                <option value="03">مارس</option>
+                <option value="04">أبريل</option>
+                <option value="05">مايو</option>
+                <option value="06">يونيو</option>
+                <option value="07">يوليو</option>
+                <option value="08">أغسطس</option>
+                <option value="09">سبتمبر</option>
+                <option value="10">أكتوبر</option>
+                <option value="11">نوفمبر</option>
+                <option value="12">ديسمبر</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <label for="day" class="form-label">اليوم</label>
+              <select id="day" class="form-select" [(ngModel)]="day" [ngModelOptions]="{standalone: true}"
+                (change)="onDateChange()" [disabled]="!month || month.trim() === ''">
+                <option value="" disabled selected>اختر اليوم</option>
+                @for (d of days; track d) {
+                <option [value]="d">{{ d }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4 row justify-content-start">
+            <button type="button" class="btn btn-remove w-50" (click)="onClear()">تفريغ</button>
+          </div>
+        </div>
+      </form>
+
+
+      <!-- Table -->
+      <div class="cardParent">
+        <!-- Loading Spinner -->
+        @if (loading) { <!-- أضف loading -->
+        <div class="col-12 text-center mt-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        }
+        <div class="card-body">
+          <div class="table-responsive custom-table">
+            @if (returns && returns.data.length > 0) {
+            <table class="table custom-table-design text-center"> <!-- أضف animation للـ table -->
+              <thead>
+                <tr>
+                  <th>رقم الطلبية</th>
+                  <th>تاريخ الطلبية</th>
+                  <th>اسم المشتري</th>
+                  <th>الكمية المرتجعة</th>
+                  <th>المبلغ المسترد</th>
+                  <th>عرض المنتجات</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (return of returns.data; track return.supplierOrderId) {
+                <tr> <!-- animate rows -->
+                  <td>{{ return.supplierOrderId }}</td>
+                  <td>{{ formatDate(return.orderDate) }}</td>
+                  <td>{{ return.buyerName }}</td>
+                  <td>{{ return.totalReturnedQuantity }}</td>
+                  <td>{{ return.totalRefundAmount | number:'1.2-2' }} جنية</td>
+                  <td class="text-center">
+                    <i class="fa-regular fa-eye fa-lg" style="color: #1b74bb; cursor: pointer;"
+                      (click)="viewReturnOrder(return.supplierOrderId, return)"></i>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+            } @else if (!loading) { <!-- أضف !loading عشان ميظهرش أثناء loading -->
+            <p class="text-center">لا توجد مرتجعات</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination - استخدم الـ component الجاهز -->
+      <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [windowSize]="1"
+        (pageChange)="onPageChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

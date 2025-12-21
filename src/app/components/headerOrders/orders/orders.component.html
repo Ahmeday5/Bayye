@@ -1,0 +1,138 @@
+<div class="container-fluid mt-5 mb-2">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Filter Buttons -->
+      <div class="row-cols-1 row-cols-md-10 row-cols-lg-11">
+        @for (btn of filterButtons; track btn.value) {
+        <button class="btn-filter" [class.active]="currentStatus === btn.value" (click)="filterByStatus(btn.value)">
+          {{ btn.text }}
+        </button>
+        }
+        <button type="button" class="btn Custombtn-filter" (click)="toggleFilter()">
+          <img src="/assets/img/Orders/Filter.png" alt="">
+        </button>
+      </div>
+
+      <!-- Filter Modal -->
+      @if (showFilter) {
+      <div class="filter"> <!-- أضف animation trigger -->
+        <form [formGroup]="filterForm" role="search">
+          <h3 class="mb-4">البحث</h3>
+          <div class="form-group mb-4">
+            <label for="status" class="form-label">حالة الطلب</label>
+            <select formControlName="status" class="form-select" id="status">
+              <option value="" disabled selected>حدد الطلب</option> <!-- disabled selected للـ placeholder -->
+              <option value="Pending">قيد الإنتظار</option>
+              <option value="Confirmed">مؤكد</option>
+              <option value="Shipped">تم الشحن</option>
+              <option value="Delivered">تم التوصيل</option>
+              <option value="Canceled">ملغي من المورد</option>
+            </select>
+          </div>
+          <div class="form-group mb-4">
+            <label for="buyerName" class="form-label">اسم المشتري</label>
+            <input formControlName="buyerName" class="form-control" type="search" id="buyerName"
+              placeholder="ابحث....." />
+          </div>
+          <div class="form-group mb-4">
+            <label for="supplierType" class="form-label">نوع المورد</label>
+            <select formControlName="supplierType" class="form-select" id="supplierType">
+              <option value="" disabled selected>حدد نوع المورد</option> <!-- disabled selected -->
+              <option value="Wholesale">جملة</option>
+              <option value="BulkWholesale">جملة الجملة</option>
+              <option value="Manufacturer">شركة مصنعة</option>
+              <option value="RestaurantCafeSupplier">موردين المطاعم والكافيهات</option>
+            </select>
+          </div>
+          <div class="row justify-content-center">
+            <button type="button" class="btn btn-filtering w-25" (click)="onFilter()">تصفية</button>
+            <button type="button" class="btn btn-remove w-25" (click)="onClear()">تفريغ</button>
+          </div>
+        </form>
+      </div>
+      }
+
+      <!-- Table -->
+      <div class="cardParent">
+        <!-- Loading Spinner -->
+        @if (loading) { <!-- أضف loading -->
+        <div class="col-12 text-center mt-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        }
+        <div class="card-body">
+          <div class="table-responsive custom-table">
+            @if (orders && orders.data.length > 0) {
+            <table class="table custom-table-design text-center"> <!-- أضف animation للـ table -->
+              <thead>
+                <tr>
+                  <th>رقم الكودي</th>
+                  <th>اسم المورد</th>
+                  <th>نوع المورد</th>
+                  <th>اسم المخزن</th>
+                  <th>عنوان المخزن</th>
+                  <th>اسم المشتري</th>
+                  <th>رقم تليفون المشتري</th>
+                  <th>حالة الطلب</th>
+                  <th>الإجمالي الأساسي</th>
+                  <th>يوم التوصيل المتوقع</th>
+                  <th>عرض</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (order of orders.data; track order.id) {
+                <tr> <!-- animate rows -->
+                  <td>{{ order.id }}</td>
+                  <td>{{ order.supplierName }}</td>
+                  <td>@if(order.supplierType == "Wholesale") {
+                    جملة }@else if (order.supplierType == "BulkWholesale") {
+                    جملة الجملة
+                    }@else if (order.supplierType == "Manufacturer") {
+                    شركة مصنعة
+                    }@else if (order.supplierType == "RestaurantCafeSupplier") {
+                    موردين المطاعم والكافيهات
+                    }@else {
+                    {{order.supplierType}}
+                    }</td>
+                  <td>{{ order.propertyName }}</td>
+                  <td>{{ order.propertyAddress }}</td>
+                  <td>{{ order.buyerName }}</td>
+                  <td>{{ order.buyerPhone }}</td>
+                  <td>@if(order.status == "Pending") {
+                    قيد الإنتظار
+                    }@else if (order.status == "Confirmed") {
+                    مؤكد
+                    }@else if (order.status == "Shipped") {
+                    تم الشحن
+                    }@else if (order.status == "Delivered") {
+                    تم التوصيل
+                    }@else if (order.status == "Canceled") {
+                    ملغي من المورد
+                    }@else {
+                    {{order.status}}
+                    }</td>
+                  <td>{{ order.totalAmount | number:'1.2-2' }} جنية</td>
+                  <td>{{ formatDate(order.deliveryDate) }}</td>
+                  <td class="text-center">
+                    <i class="fa-regular fa-eye fa-lg" style="color: #1b74bb; cursor: pointer;"
+                      (click)="viewOrder(order.id, order)"></i>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+            } @else if (!loading) { <!-- أضف !loading عشان ميظهرش أثناء loading -->
+            <p class="text-center">لا توجد طلبات</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination - استخدم الـ component الجاهز -->
+      <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [windowSize]="1"
+        (pageChange)="onPageChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

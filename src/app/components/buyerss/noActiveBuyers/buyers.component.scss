@@ -1,0 +1,99 @@
+.btn-filter {
+  width: auto;
+  border: 1px solid var(--main-color);
+  background: transparent;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 100%;
+  text-align: center;
+  padding: 5px 15px;
+  color: var(--main-color);
+  margin-left: 10px;
+}
+
+.Custombtn-filter {
+  width: auto;
+  border: none;
+  background: transparent;
+}
+
+/************  table *****************/
+
+.cardParent {
+  border: 2px solid var(--main-color);
+  border-radius: 12px;
+}
+
+.cardParent .card-body {
+  padding: 10px;
+}
+
+.CustomcardParent {
+  background: #eae1e1 !important;
+}
+
+.custom-table {
+  overflow-x: auto;
+}
+
+.custom-table-design {
+  border-collapse: separate;
+  /* لفصل الصفوف */
+  border-spacing: 0 3px;
+  /* مسافة بين الصفوف */
+  margin: 0;
+}
+
+.custom-table-design thead {
+  border: none;
+}
+
+.custom-table-design thead th {
+  background: var(--main-color) !important;
+  color: var(--second-color);
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 100%;
+  padding: 15px !important;
+  border-right: 2px solid #ffa500;
+}
+
+.custom-table-design tbody tr {
+  background: var(--second-color);
+  border: 1px solid transparent;
+  border-radius: 12px !important;
+}
+
+.custom-table-design td {
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--main-color);
+  padding: 6px !important;
+  border-right: 2px solid #ffa500; // خط برتقالي بين العواميد في الجسم
+}
+
+.custom-table-design .detailsCustomerbtn {
+  border: 1px solid var(--third-color);
+}
+
+.btn-edit {
+  border: none;
+}
+
+.btn-edit:focus,
+.btn-edit:active,
+.btn-edit:focus-visible {
+  border: none;
+}
+
+.btn-edit img {
+  max-width: 100%;
+  height: auto;
+}
+
+.img-check {
+  width: 15px;
+  height: 15px;
+}
