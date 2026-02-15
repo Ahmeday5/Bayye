@@ -37,6 +37,8 @@ import { AddProductComponent } from './components/products/add-product/add-produ
 import { DeliveryStationComponent } from './components/delivery-station/delivery-station.component';
 import { AddDeliverStationComponent } from './components/delivery-station/add-deliver-station/add-deliver-station.component';
 import { GetAllDeliverStationComponent } from './components/delivery-station/get-all-deliver-station/get-all-deliver-station.component';
+import { SupplierStatementComponent } from './components/Suppliers/supplier-statement/supplier-statement.component';
+import { InvationCodeComponent } from './components/Suppliers/invation-code/invation-code.component';
 
 export const canActivate: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -48,7 +50,7 @@ export const canActivate: CanActivateFn = (route, state) => {
         return router.createUrlTree(['/login']);
       }
       return true;
-    })
+    }),
   );
 };
 
@@ -63,7 +65,7 @@ export const canActivateRole: CanActivateFn = (route, state) => {
         return router.createUrlTree(['/dashboard']);
       }
       return true;
-    })
+    }),
   );
 };
 
@@ -81,7 +83,7 @@ export const routes: Routes = [
               return router.createUrlTree(['/dashboard']);
             }
             return true;
-          })
+          }),
         );
       },
     ],
@@ -249,7 +251,13 @@ export const routes: Routes = [
     canActivate: [canActivate],
     data: { breadcrumb: 'كشف حساب المورد' },
   },
-    {
+  {
+    path: 'supplierStatement',
+    component: SupplierStatementComponent,
+    canActivate: [canActivate],
+    data: { breadcrumb: 'كشف حساب مورد' },
+  },
+  {
     path: 'Products',
     component: ProductsComponent,
     canActivate: [canActivate],
@@ -284,6 +292,12 @@ export const routes: Routes = [
     component: GetAllDeliverStationComponent,
     canActivate: [canActivate],
     data: { breadcrumb: 'جميع محطات التوصيل' },
+  },
+  {
+    path: 'InvationCode',
+    component: InvationCodeComponent,
+    canActivate: [canActivate],
+    data: { breadcrumb: 'إدارة اكواد الدعوة' },
   },
   { path: '**', redirectTo: '' }, // لو المسار غلط، ارجع للرئيسية
 ];

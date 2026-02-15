@@ -19,9 +19,15 @@
   cursor: pointer;
 }
 
-.header .logout a img {
-  width: 20px;
-  margin-right: 17px;
+.header .logout a i {
+  color: var(--main-color);
+}
+
+.header .logout a h6 {
+  display: inline-block;
+  margin-right: 5px;
+  font-weight: bold;
+  color: var(--main-color);
 }
 
 .header .title-header {

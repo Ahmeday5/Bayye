@@ -50,7 +50,7 @@ export class AddSupplierComponent implements OnInit {
     minimumOrderItems: '',
     deliveryDays: '',
   };
-
+  
   constructor(
     private apiService: ApiService,
     private router: Router,

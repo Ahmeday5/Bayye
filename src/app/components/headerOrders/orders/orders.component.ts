@@ -113,7 +113,7 @@ export class OrdersComponent implements OnInit {
     // مش محتاجة دلوقتي، الـ pagination component هيحسبها
     return [];
   }
-
+  
   onPageChange(page: number | undefined): void {
     // غير لتتعامل مع undefined من الـ component
     if (typeof page === 'number') {

@@ -4,7 +4,7 @@
   height: 100vh; /* ارتفاع الشاشة بالكامل */
   width: 17vw;
   max-width: 250px; /* الحد الأقصى للعرض */
-  min-width: 180px; /* الحد الأدنى للعرض */
+  min-width: 250px; /* الحد الأدنى للعرض */
   position: fixed; /* تثبيت الـ Sidebar */
   top: 0; /* من أعلى الشاشة */
   right: 0; /* محاذاة لليمين (لأن الاتجاه rtl) */
@@ -23,29 +23,46 @@
   right: -100%;
 }
 
+.sidebar.sidebar-mini {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+}
+
+.sidebar.sidebar-mini .nav-link span {
+  display: none; /* إخفاء النصوص */
+}
+
+.sidebar.sidebar-mini .nav-link {
+  justify-content: center;
+  padding: 15px 0;
+}
+
+.sidebar.sidebar-mini .icon-text {
+  justify-content: center;
+}
+
+.sidebar.sidebar-mini .sidebar-header {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.sidebar.sidebar-mini .logo img {
+  display: none;
+}
+
 /* تنسيق رأس الـ Sidebar */
 .sidebar-header {
   text-align: center; /* محاذاة في المنتصف */
   margin-bottom: 2rem; /* هامش سفلي */
-  width: 70%; /* عرض اللوجو */
-  margin: 20px auto; /* توسيط أفقي */
+  width: 100%; /* عرض اللوجو */
+  margin-bottom: 20px; /* توسيط أفقي */
   height: auto; /* ارتفاع تلقائي */
 }
 
 .sidebar-header .logo img {
-  width: 100%; /* عرض اللوجو بالكامل */
+  width: 70%; /* عرض اللوجو بالكامل */
   transition: all 0.3s ease; /* تأثير انتقال سلس */
-}
-
-.sidebar-header .logo h4 {
-  font-family: var(--font-latin);
-  font-weight: 800;
-  font-size: 15px;
-  line-height: 100%;
-  text-align: center;
-  color: var(--second-color);
-  margin-top: 20px;
-  letter-spacing: 0.5px;
 }
 
 /* تنسيق قائمة التنقل */
@@ -117,6 +134,11 @@
   transition: all 0.3s ease-in-out;
 }
 
+.toggle-btn:hover {
+  background: var(--second-color);
+  color: var(--main-color);
+}
+
 /* تنسيق الزر عندما يكون الـ Sidebar مفتوحًا */
 .toggle-btn-open {
   background-color: var(--main-color); /* لون مختلف عند الفتح */
@@ -128,11 +150,47 @@
   font-weight: bold;
 }
 
+.desktop-minimize-btn {
+  display: none;
+  z-index: 1100;
+  color: var(--second-color);
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.desktop-minimize-btn:focus {
+  border: none;
+  box-shadow: none;
+  background: var(--second-color);
+  background: none;
+}
+
+.desktop-minimize-btn.minimized {
+  right: 80px; /* بجانب السايدبار المصغر */
+}
+
 @media (max-width: 992px) {
+  .toggle-btn {
+    display: block; /* زر الموبايل يظهر */
+  }
+  .desktop-minimize-btn {
+    display: none !important; /* زر التصغير مخفي في الموبايل */
+  }
   .sidebar {
     width: 100vw;
   }
+}
+
+@media (min-width: 993px) {
   .toggle-btn {
-    display: block;
+    display: none !important; /* زر الموبايل مخفي في الديسكتوب */
+  }
+  .desktop-minimize-btn {
+    display: block; /* زر التصغير يظهر في الديسكتوب فقط */
+  }
+  .sidebar {
+    right: 0; /* السايدبار مفتوح دائمًا في الديسكتوب */
   }
 }

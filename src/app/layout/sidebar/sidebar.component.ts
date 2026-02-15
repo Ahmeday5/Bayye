@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostBinding } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common'; // إضافة CommonModule
@@ -11,31 +11,71 @@ import { CommonModule } from '@angular/common'; // إضافة CommonModule
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
-  // حالة الـ Sidebar (مفتوحة أو مغلقة)
-  isSidebarOpen: boolean = window.innerWidth > 992;
+// حالة السايدبار في الموبايل (مفتوح أو مغلق)
+  isMobileSidebarOpen: boolean = false;
+
+  // حالة التصغير في الديسكتوب (آيقونات فقط)
+  isMiniSidebar: boolean = false;
 
   // حقن Router و AuthService
   constructor(private authService: AuthService, private router: Router) {}
 
   // التهيئة عند تحميل الكومبوننت
   ngOnInit(): void {
-    // لا حاجة لتهيئة إضافية
+    // عند تحميل الصفحة: إذا كان ديسكتوب → نبدأ بوضع كامل (غير مصغر)
+    this.updateSidebarState();
   }
 
   // بعد تحميل العرض
   ngAfterViewInit(): void {
-    // إضافة مستمع لتغيير حجم النافذة
-    window.addEventListener('resize', () => {
-      this.isSidebarOpen = window.innerWidth > 992;
-    });
+    // تحديث الحالة عند تغيير حجم الشاشة
+    window.addEventListener('resize', () => this.updateSidebarState());
+  }
+
+  @HostBinding('style.--sidebar-width')
+  get sidebarWidth(): string {
+    if (this.isMiniSidebar && window.innerWidth >= 993) {
+      return '70px';
+    }
+    return '250px'; // أو 17vw لو عايز، بس 250px أفضل وأدق
   }
 
   // فتح/قفل الـ Sidebar
   toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
+    this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
   }
 
-  // التحقق إذا كان الرابط نشطًا
+  // دالة لتحديد حالة السايدبار بناءً على حجم الشاشة
+  private updateSidebarState(): void {
+    const isDesktop = window.innerWidth >= 993;
+    this.isMobileSidebarOpen = isDesktop ? true : false; // في الديسكتوب دايمًا مفتوح
+    if (!isDesktop) {
+      this.isMiniSidebar = false; // الموبايل ما يستخدمش التصغير
+    }
+  }
+
+  // فتح وإغلاق السايدبار في الموبايل فقط
+  toggleMobileSidebar(): void {
+    if (window.innerWidth <= 992) {
+      this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
+    }
+  }
+
+  // تصغير وتكبير السايدبار في الديسكتوب فقط
+  toggleMiniSidebar(): void {
+    if (window.innerWidth >= 993) {
+      this.isMiniSidebar = !this.isMiniSidebar;
+    }
+  }
+
+  // عند الضغط على أي عنصر في القايمة (في الموبايل بس يتقفل)
+  onMenuItemClick(): void {
+    if (window.innerWidth <= 992) {
+      this.isMobileSidebarOpen = false; // إغلاق تلقائي في الموبايل
+    }
+  }
+
+  // تحديد إذا كان الرابط نشط
   isActive(path: string): boolean {
     return this.router.isActive(path, {
       paths: 'subset',
@@ -100,6 +140,12 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       path: '/advertisements',
       iconActive: 'fas fa-bullhorn fa-xl',
       iconInactive: 'fas fa-bullhorn fa-xl',
+    },
+    {
+      label: 'اكواد الدعوة',
+      path: '/InvationCode',
+      iconActive: 'fas fa-link fa-xl',
+      iconInactive: 'fas fa-link fa-xl',
     },
   ];
 }

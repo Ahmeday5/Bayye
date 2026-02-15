@@ -1,15 +1,26 @@
-<button class="btn btn-primary toggle-btn" [ngClass]="{'toggle-btn-open': isSidebarOpen}" (click)="toggleSidebar()">
-  <i [class]="isSidebarOpen ? 'fa-solid fa-times' : 'fa-solid fa-bars'"></i>
+<button class="btn btn-primary toggle-btn" [ngClass]="{'toggle-btn-open': isMobileSidebarOpen}"
+  (click)="toggleMobileSidebar()">
+  <i [class]="isMobileSidebarOpen ? 'fa-solid fa-times' : 'fa-solid fa-bars'"></i>
 </button>
 
 <!-- حاوية الـ Sidebar -->
-<aside class="sidebar" [ngClass]="{'sidebar-open': isSidebarOpen}" dir="rtl">
+<aside class="sidebar" [class.sidebar-open]="isMobileSidebarOpen" [class.sidebar-mini]="isMiniSidebar" dir="rtl">
   <nav class="sidebar-nav" id="sidebar">
     <!-- رأس الـ Sidebar -->
     <div class="sidebar-header">
+      <div class="d-flex justify-content-end w-100">
+        <!-- زر تصغير/تكبير السايدبار في الديسكتوب فقط (يظهر الآيقونات بس) -->
+        <button class="btn desktop-minimize-btn" [class.minimized]="isMiniSidebar" (click)="toggleMiniSidebar()"
+          title="{{ isMiniSidebar ? 'تكبير القائمة' : 'تصغير القائمة' }}">
+
+          <!-- السطر ده هو اللي هيتم تعديله -->
+          <i class="fa-solid fa-angles-right" [class.fa-angles-left]="isMiniSidebar"></i>
+        </button>
+      </div>
       <div class="logo" id="sidebarLogo">
-        <a routerLink="/dashboard">
-          <img src="../../../assets/img/logo.jfif" class="img-fluid" style="width: 85px; border-radius: 50%; height: 85px;" alt="Logo" loading="lazy" />
+        <a routerLink="/dashboard" (click)="onMenuItemClick()">
+          <img src="/assets/img/logo.png" class="img-fluid"
+            style="width: 85px; border-radius: 50%; height: 85px;" alt="Logo" loading="lazy" />
         </a>
       </div>
     </div>
@@ -21,7 +32,7 @@
         @for (item of menuItems; track item.path) {
         <li class="nav-item">
           <a [routerLink]="item.path" class="nav-link" routerLinkActive="nav-active"
-            [routerLinkActiveOptions]="{exact: false}">
+            [routerLinkActiveOptions]="{exact: false}" (click)="onMenuItemClick()">
             <div class="icon-text">
               <!-- الصورة تتغير بناءً على حالة الرابط (نشط أو غير نشط) -->
               <i [class]="isActive(item.path) ? item.iconActive : item.iconInactive"></i>

@@ -41,6 +41,13 @@ import {
   categoryData,
   productResponse,
 } from '../types/allproducts.type';
+import {
+  AddCodeRequest,
+  AddCodeResponse,
+  CodeDataResponse,
+  DeleteCodeResponse,
+  ReferralCode,
+} from '../types/code.type';
 
 @Injectable({
   providedIn: 'root', // جعل الخدمة متاحة لكل التطبيق
@@ -72,7 +79,7 @@ export class ApiService {
           status: error.status,
           message: errorMessage,
         }));
-      })
+      }),
     );
   }
 
@@ -91,7 +98,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب مجموع المشترين:', error);
           return throwError(() => new Error('فشل جلب مجموع المشترين'));
-        })
+        }),
       );
   }
 
@@ -107,7 +114,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب مجموع المشترين:', error);
           return throwError(() => new Error('فشل جلب مجموع المشترين'));
-        })
+        }),
       );
   }
 
@@ -125,7 +132,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب مجموع المشترين:', error);
           return throwError(() => new Error('فشل جلب مجموع المشترين'));
-        })
+        }),
       );
   }
 
@@ -141,7 +148,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب مجموع الموردين:', error);
           return throwError(() => new Error('فشل جلب مجموع الموردين'));
-        })
+        }),
       );
   }
 
@@ -159,7 +166,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب مجموع الموردين:', error);
           return throwError(() => new Error('فشل جلب مجموع الموردين'));
-        })
+        }),
       );
   }
 
@@ -177,7 +184,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب مجموع الموردين:', error);
           return throwError(() => new Error('فشل جلب مجموع الموردين'));
-        })
+        }),
       );
   }
 
@@ -195,7 +202,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب إجمالي الطلبات اليومية:', error);
           return throwError(() => new Error('فشل جلب إجمالي الطلبات اليومية'));
-        })
+        }),
       );
   }
 
@@ -213,7 +220,7 @@ export class ApiService {
         catchError((error) => {
           console.error('خطأ في جلب اجمالي الطلبات الشهرية:', error);
           return throwError(() => new Error('فشل جلب اجمالي الطلبات الشهرية'));
-        })
+        }),
       );
   }
 
@@ -230,7 +237,7 @@ export class ApiService {
     return this.http
       .get<AdvertisementsResponse>(
         `${this.baseUrl}/api/Dashboard/getAllAdvertisements`,
-        { headers }
+        { headers },
       )
       .pipe(
         map((response) => {
@@ -249,7 +256,7 @@ export class ApiService {
             errorMessage = 'الـ endpoint غير موجود.';
           }
           return throwError(() => new Error(errorMessage));
-        })
+        }),
       );
   }
 
@@ -257,7 +264,7 @@ export class ApiService {
 
   updateAdvertisement(
     formData: FormData,
-    id: number
+    id: number,
   ): Observable<UpdateAdvertisementResponse> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -270,7 +277,7 @@ export class ApiService {
         formData,
         {
           headers,
-        }
+        },
       )
       .pipe(
         map((response) => {
@@ -290,7 +297,7 @@ export class ApiService {
             errorMessage = `خطأ ${error.status}: ${error.statusText}`;
           }
           return throwError(() => ({ success: false, message: errorMessage }));
-        })
+        }),
       );
   }
 
@@ -308,7 +315,7 @@ export class ApiService {
         catchError((error) => {
           console.error(`خطأ في حذف الاعلان ${id}:`, error);
           return throwError(() => new Error(`فشل حذف الاعلان ${id}`));
-        })
+        }),
       );
   }
 
@@ -321,11 +328,12 @@ export class ApiService {
     });
 
     return this.http
-      .post<{ message: string; data: Advertisement }>(
-        `${this.baseUrl}/api/Dashboard/addAdvertisement`,
-        formData,
-        { headers }
-      )
+      .post<{
+        message: string;
+        data: Advertisement;
+      }>(`${this.baseUrl}/api/Dashboard/addAdvertisement`, formData, {
+        headers,
+      })
       .pipe(
         map((response) => {
           console.log('Add Response:', response);
@@ -344,9 +352,9 @@ export class ApiService {
             errorMessage = `خطأ ${error.status}: ${error.statusText}`;
           }
           return throwError(
-            () => ({ success: false, message: errorMessage } as AddResponse)
+            () => ({ success: false, message: errorMessage }) as AddResponse,
           );
-        })
+        }),
       );
   }
 
@@ -361,11 +369,10 @@ export class ApiService {
     });
 
     return this.http
-      .post<{ message: string; data: allSuppliers }>(
-        `${this.baseUrl}/api/Dashboard/addSupplier`,
-        formData,
-        { headers }
-      )
+      .post<{
+        message: string;
+        data: allSuppliers;
+      }>(`${this.baseUrl}/api/Dashboard/addSupplier`, formData, { headers })
       .pipe(
         map((response) => {
           console.log('addSupplier Response:', response);
@@ -385,9 +392,12 @@ export class ApiService {
           }
           return throwError(
             () =>
-              ({ success: false, message: errorMessage } as AddSupplierResponse)
+              ({
+                success: false,
+                message: errorMessage,
+              }) as AddSupplierResponse,
           );
-        })
+        }),
       );
   }
 
@@ -395,7 +405,7 @@ export class ApiService {
   getAllSuppliers(
     page?: number,
     pageSize?: number,
-    name?: string
+    name?: string,
   ): Observable<SuppliersResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -431,7 +441,7 @@ export class ApiService {
             pageSize: 10,
             totalItems: 0,
             totalPages: 1,
-          }
+          },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب كل الاعلانات:', error);
@@ -445,7 +455,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -453,7 +463,7 @@ export class ApiService {
   getAllActiveSuppliers(
     page?: number,
     pageSize?: number,
-    name?: string
+    name?: string,
   ): Observable<SuppliersResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -489,7 +499,7 @@ export class ApiService {
             pageSize: 10,
             totalItems: 0,
             totalPages: 1,
-          }
+          },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب كل الموردين الناشطين:', error);
@@ -503,7 +513,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -511,7 +521,7 @@ export class ApiService {
   getAllinActiveSuppliers(
     page?: number,
     pageSize?: number,
-    name?: string
+    name?: string,
   ): Observable<SuppliersResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -547,7 +557,7 @@ export class ApiService {
             pageSize: 10,
             totalItems: 0,
             totalPages: 1,
-          }
+          },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب كل الموردين غير الناشطين:', error);
@@ -561,7 +571,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -569,7 +579,7 @@ export class ApiService {
 
   updateSupplier(
     formData: FormData,
-    id: number
+    id: number,
   ): Observable<UpdateSupplierResponse> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -582,7 +592,7 @@ export class ApiService {
         formData,
         {
           headers,
-        }
+        },
       )
       .pipe(
         map((response) => {
@@ -602,7 +612,7 @@ export class ApiService {
             errorMessage = `خطأ ${error.status}: ${error.statusText}`;
           }
           return throwError(() => ({ success: false, message: errorMessage }));
-        })
+        }),
       );
   }
 
@@ -620,7 +630,7 @@ export class ApiService {
         catchError((error) => {
           console.error(`خطأ في حذف المورد ${id}:`, error);
           return throwError(() => new Error(`فشل حذف المورد ${id}`));
-        })
+        }),
       );
   }
 
@@ -647,7 +657,7 @@ export class ApiService {
             errorMessage = 'المورد غير موجود.';
           }
           return throwError(() => new Error(errorMessage));
-        })
+        }),
       );
   }
 
@@ -674,7 +684,7 @@ export class ApiService {
             errorMessage = 'المورد غير موجود.';
           }
           return throwError(() => new Error(errorMessage));
-        })
+        }),
       );
   }
 
@@ -682,7 +692,7 @@ export class ApiService {
 
   addToSupplierWallet(
     supplierId: number,
-    amount: number
+    amount: number,
   ): Observable<WalletResponse> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -711,9 +721,9 @@ export class ApiService {
           errorMessage = `خطأ ${error.status}: ${error.statusText}`;
         }
         return throwError(
-          () => ({ success: false, message: errorMessage } as WalletResponse)
+          () => ({ success: false, message: errorMessage }) as WalletResponse,
         );
-      })
+      }),
     );
   }
 
@@ -729,7 +739,7 @@ export class ApiService {
 
     console.log(
       'Sending addBuyer request with token:',
-      token ? 'Present' : 'Missing'
+      token ? 'Present' : 'Missing',
     );
     console.log('FormData content:');
     formData.forEach((value, key) => {
@@ -737,11 +747,10 @@ export class ApiService {
     });
 
     return this.http
-      .post<{ message: string; data: addallBuyers }>(
-        `${this.baseUrl}/api/Dashboard/addBuyer`,
-        formData,
-        { headers }
-      )
+      .post<{
+        message: string;
+        data: addallBuyers;
+      }>(`${this.baseUrl}/api/Dashboard/addBuyer`, formData, { headers })
       .pipe(
         map((response) => {
           console.log('addBuyer Response:', response);
@@ -771,9 +780,9 @@ export class ApiService {
           }
           return throwError(
             () =>
-              ({ success: false, message: errorMessage } as AddBuyersResponse)
+              ({ success: false, message: errorMessage }) as AddBuyersResponse,
           );
-        })
+        }),
       );
   }
 
@@ -782,7 +791,7 @@ export class ApiService {
     page?: number,
     pageSize?: number,
     fullName?: string,
-    phoneNumber?: string
+    phoneNumber?: string,
   ): Observable<inactiveBuyersResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -822,7 +831,7 @@ export class ApiService {
             pageSize: 10,
             totalItems: 0,
             totalPages: 1,
-          }
+          },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب كل المشترين الغير ناشطين:', error);
@@ -836,7 +845,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -845,7 +854,7 @@ export class ApiService {
     page?: number,
     pageSize?: number,
     fullName?: string,
-    phoneNumber?: string
+    phoneNumber?: string,
   ): Observable<activeBuyersResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -885,7 +894,7 @@ export class ApiService {
             pageSize: 10,
             totalItems: 0,
             totalPages: 1,
-          }
+          },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب كل المشترين الناشطين:', error);
@@ -899,7 +908,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -931,9 +940,12 @@ export class ApiService {
         }
         return throwError(
           () =>
-            ({ success: false, message: errorMessage } as activateBuyerResponse)
+            ({
+              success: false,
+              message: errorMessage,
+            }) as activateBuyerResponse,
         );
-      })
+      }),
     );
   }
 
@@ -965,9 +977,12 @@ export class ApiService {
         }
         return throwError(
           () =>
-            ({ success: false, message: errorMessage } as activateBuyerResponse)
+            ({
+              success: false,
+              message: errorMessage,
+            }) as activateBuyerResponse,
         );
-      })
+      }),
     );
   }
 
@@ -975,7 +990,7 @@ export class ApiService {
 
   updateBuyer(
     formData: FormData,
-    id: number
+    id: number,
   ): Observable<UpdateBuyersResponse> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -988,7 +1003,7 @@ export class ApiService {
         formData,
         {
           headers,
-        }
+        },
       )
       .pipe(
         map((response) => {
@@ -1008,7 +1023,7 @@ export class ApiService {
             errorMessage = `خطأ ${error.status}: ${error.statusText}`;
           }
           return throwError(() => ({ success: false, message: errorMessage }));
-        })
+        }),
       );
   }
 
@@ -1026,7 +1041,7 @@ export class ApiService {
         catchError((error) => {
           console.error(`خطأ في حذف المشتري ${id}:`, error);
           return throwError(() => new Error(`فشل حذف المشتري ${id}`));
-        })
+        }),
       );
   }
 
@@ -1055,7 +1070,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -1065,7 +1080,7 @@ export class ApiService {
   getSupplierOrders(
     page: number = 1,
     pageSize: number = 10,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<OrdersResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -1081,7 +1096,7 @@ export class ApiService {
     return this.http.get<OrdersResponse>(url, { headers }).pipe(
       map(
         (response) =>
-          response || { totalCount: 0, page: 1, pageSize: 10, data: [] }
+          response || { totalCount: 0, page: 1, pageSize: 10, data: [] },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب الطلبات:', error);
@@ -1092,7 +1107,7 @@ export class ApiService {
           errorMessage = 'غير مصرح. سجل دخول مرة أخرى.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -1102,7 +1117,7 @@ export class ApiService {
   getReturnOrders(
     page: number = 1,
     pageSize: number = 10,
-    params?: HttpParams
+    params?: HttpParams,
   ): Observable<ReturnsResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -1118,7 +1133,7 @@ export class ApiService {
     return this.http.get<ReturnsResponse>(url, { headers }).pipe(
       map(
         (response) =>
-          response || { totalCount: 0, page: 1, pageSize: 10, data: [] }
+          response || { totalCount: 0, page: 1, pageSize: 10, data: [] },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب المرتجعات:', error);
@@ -1129,7 +1144,7 @@ export class ApiService {
           errorMessage = 'غير مصرح. سجل دخول مرة أخرى.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -1139,7 +1154,7 @@ export class ApiService {
   getAllAdmins(
     page?: number,
     pageSize?: number,
-    search?: string
+    search?: string,
   ): Observable<adminsResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -1183,7 +1198,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -1191,7 +1206,7 @@ export class ApiService {
 
   updateAdmin(
     id: string,
-    body: { email: string; role: string }
+    body: { email: string; role: string },
   ): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -1223,7 +1238,7 @@ export class ApiService {
           ) {
             // التعامل مع duplicate email (array من errors)
             const duplicateError = error.error.find(
-              (err: any) => err.code === 'DuplicateUserName'
+              (err: any) => err.code === 'DuplicateUserName',
             );
             if (duplicateError) {
               errorMessage =
@@ -1239,7 +1254,7 @@ export class ApiService {
             errorMessage = `خطأ ${error.status}: ${error.statusText}`;
           }
           return throwError(() => ({ success: false, message: errorMessage }));
-        })
+        }),
       );
   }
 
@@ -1286,7 +1301,7 @@ export class ApiService {
               (err: any) =>
                 err.code === 'PasswordRequiresNonAlphanumeric' ||
                 err.code === 'PasswordRequiresLower' ||
-                err.code === 'PasswordRequiresUpper'
+                err.code === 'PasswordRequiresUpper',
             );
             if (passwordErrors.length > 0) {
               errorMessage =
@@ -1309,7 +1324,7 @@ export class ApiService {
             errorMessage = `خطأ ${error.status}: ${error.statusText}`;
           }
           return throwError(() => ({ success: false, message: errorMessage }));
-        })
+        }),
       );
   }
 
@@ -1321,7 +1336,7 @@ export class ApiService {
     pageSize?: number,
     fromDate?: string,
     toDate?: string,
-    commercialName?: string
+    commercialName?: string,
   ): Observable<statementResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -1371,7 +1386,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -1413,9 +1428,9 @@ export class ApiService {
           }
           return throwError(
             () =>
-              ({ success: false, message: errorMessage } as AddProductResponse)
+              ({ success: false, message: errorMessage }) as AddProductResponse,
           );
-        })
+        }),
       );
   }
 
@@ -1423,7 +1438,7 @@ export class ApiService {
     page?: number,
     pageSize?: number,
     productName?: string,
-    category?: string
+    category?: string,
   ): Observable<productResponse> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders();
@@ -1482,7 +1497,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -1495,7 +1510,7 @@ export class ApiService {
     console.log('Token being sent:', token ? 'Present' : 'Missing'); // log للتحقق من الـ token
 
     // بناء URL ديناميكي
-    let url = `${this.baseUrl}/api/Buyer/categories`;
+    let url = `${this.baseUrl}/api/Supplier/categories`;
 
     return this.http.get<categoryData>(url, { headers }).pipe(
       map(
@@ -1503,7 +1518,7 @@ export class ApiService {
           response || {
             message: 'Categories retrieved successfully',
             data: [],
-          }
+          },
       ),
       catchError((error: HttpErrorResponse) => {
         console.error('خطأ في جلب كل الفئات:', error);
@@ -1517,7 +1532,7 @@ export class ApiService {
           errorMessage = 'الـ endpoint غير موجود.';
         }
         return throwError(() => new Error(errorMessage));
-      })
+      }),
     );
   }
 
@@ -1535,7 +1550,7 @@ export class ApiService {
         catchError((error) => {
           console.error(`خطأ في حذف المنتج ${id}:`, error);
           return throwError(() => new Error(`فشل حذف المنتج ${id}`));
-        })
+        }),
       );
   }
 
@@ -1555,7 +1570,7 @@ export class ApiService {
       catchError((error) => {
         console.error('خطأ في جلب محطات التوصيل:', error);
         return throwError(() => new Error('فشل جلب البيانات'));
-      })
+      }),
     );
   }
 
@@ -1578,7 +1593,7 @@ export class ApiService {
         catchError((error) => {
           console.error(`خطأ في حذف المحطة ${id}:`, error);
           return throwError(() => new Error(`فشل حذف المحطة ${id}`));
-        })
+        }),
       );
   }
 
@@ -1620,7 +1635,81 @@ export class ApiService {
             success: false,
             message: msg,
           });
-        })
+        }),
       );
+  }
+
+  /*******************************************codes**************************************************/
+
+  /*********AddCodes***********/
+
+  addCode(body: AddCodeRequest): Observable<AddCodeResponse> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : '',
+    });
+
+    const url = `${this.baseUrl}/api/Dashboard/referral-codes`;
+
+    return this.http.post<AddCodeResponse>(url, body, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('خطأ في إضافة الكود:', error);
+
+        let errorMsg = 'حدث خطأ أثناء إضافة الكود';
+
+        if (error.error?.message) {
+          errorMsg = error.error.message;
+        } else if (error.status) {
+          errorMsg = `خطأ ${error.status} - ${error.statusText}`;
+        }
+
+        return throwError(
+          () => ({ message: errorMsg, code: body.code }) as AddCodeResponse,
+        );
+      }),
+    );
+  }
+
+  getAllCodes(): Observable<ReferralCode[]> {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    const url = `${this.baseUrl}/api/Dashboard/referral-codes`;
+
+    return this.http.get<ReferralCode[]>(url, { headers }).pipe(
+      catchError((err: HttpErrorResponse) => {
+        console.error('خطأ جلب الأكواد:', err);
+
+        let msg = 'فشل جلب الأكواد';
+        if (err.status === 401) msg = 'غير مصرح – يرجى تسجيل الدخول';
+        if (err.status === 0) msg = 'مشكلة في الاتصال بالسيرفر';
+
+        return throwError(() => new Error(msg));
+      }),
+    );
+  }
+
+  //مسح الكود
+  deleteCode(id: number): Observable<DeleteCodeResponse> {
+    const token = localStorage.getItem('token');
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : new HttpHeaders();
+
+    const url = `${this.baseUrl}/api/Dashboard/referral-codes/${id}`;
+
+    return this.http.delete<DeleteCodeResponse>(url, { headers }).pipe(
+      catchError((err) => {
+        console.error(`فشل حذف الكود ${id}:`, err);
+        const msg = err.error?.message || `فشل حذف الكود ${id}`;
+        return throwError(
+          () => ({ message: msg, deletedId: id }) as DeleteCodeResponse,
+        );
+      }),
+    );
   }
 }

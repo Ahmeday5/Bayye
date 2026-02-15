@@ -70,6 +70,7 @@
                   <th>الصورة</th>
                   <th>نسبة الخصم</th>
                   <th>رصيد المحفظة</th>
+                  <th>لينك كشف الحساب</th>
                   <th>الحالة</th>
                   <th>تعديل</th>
                   <th>حذف</th>
@@ -104,6 +105,9 @@
                   </td>
                   <td>{{supplier.profitPercentage}}</td>
                   <td>{{supplier.walletBalance}}</td>
+                  <td><a target="_blank"
+                      href="http://supplierbayyedashboard.theonesystemco.com">http://supplierbayyedashboard.theonesystemco.com/</a>
+                  </td>
                   <td>{{supplier.isActive? 'نشط' : 'غير نشط'}}</td>
                   <td>
                     <button class="btn btn-edit" (click)="editSuppliers(supplier.id)">
